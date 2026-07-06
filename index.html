@@ -146,6 +146,30 @@
   .cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,229,255,.85),0 0 80px rgba(0,229,255,.35)}
   .cta:focus-visible{outline:3px solid var(--cream);outline-offset:3px}
 
+  /* ===== INTRO ===== */
+  .intro{
+    max-width:640px;
+    margin:0 auto;
+    padding:56px 24px 8px;
+    text-align:center;
+  }
+  .intro .hi{
+    font-family:'Yellowtail',cursive;
+    font-size:clamp(38px,7vw,52px);
+    color:var(--sunset);
+    text-shadow:0 0 12px rgba(255,158,31,.6);
+    display:block;
+    transform:rotate(-3deg);
+    margin-bottom:14px;
+  }
+  .intro p{
+    font-size:18px;
+    line-height:1.65;
+    color:var(--cream);
+    margin-bottom:14px;
+  }
+  .intro strong{color:var(--cyan);font-weight:600}
+
   /* ===== INFO ===== */
   .info{
     position:relative;
@@ -293,6 +317,24 @@
   }
   .success p{color:var(--cream);font-size:17px;line-height:1.55}
 
+  button.cancel{
+    margin-top:22px;
+    padding:11px 26px;
+    font-family:'Jost',sans-serif;
+    font-weight:500;
+    font-size:15px;
+    letter-spacing:.06em;
+    color:var(--muted);
+    background:transparent;
+    border:1.5px solid rgba(200,182,226,.45);
+    border-radius:999px;
+    cursor:pointer;
+    transition:color .15s,border-color .15s;
+  }
+  button.cancel:hover{color:var(--cream);border-color:var(--cream)}
+  button.cancel:focus-visible{outline:2px solid var(--cream);outline-offset:2px}
+  button.cancel:disabled{opacity:.5;cursor:wait}
+
   /* ===== FOOTER ===== */
   footer{
     text-align:center;
@@ -341,10 +383,16 @@
     <p class="eyebrow">Личное приглашение</p>
     <h1>Vice City<br>Party</h1>
     <span class="script">35 years</span>
-    <p class="hero-date">19 июля · <span>18:00</span></p>
+    <p class="hero-date">19 июля · <span>18:00</span> · Коттедж</p>
     <a class="cta" href="#rsvp">Я в деле</a>
   </div>
 </header>
+
+<section class="intro">
+  <span class="hi">Привет!</span>
+  <p>Меня зовут <strong>Шамиль</strong>, и если ты видишь этот сайт — значит, я приглашаю тебя отметить день рождения вместе со мной 🎉</p>
+  <p>Чтобы ничего не перепутать, я решил немного автоматизировать организацию. Заполни пару полей ниже — это очень мне поможет.</p>
+</section>
 
 <section class="info">
   <div class="info-grid">
@@ -400,7 +448,9 @@
 
   <div class="success" id="success">
     <h3>Ты в списке! 🌴</h3>
-    <p>Отлично, жду тебя 19 июля к 18:00.<br>Адрес коттеджа пришлю тебе лично в ближайшее время.<br>Welcome to Vice City.</p>
+    <p id="successText">Отлично, жду тебя 19 июля к 18:00.<br>Адрес коттеджа пришлю тебе лично в ближайшее время.<br>Welcome to Vice City.</p>
+    <button class="cancel" type="button" id="cancelBtn">Отменить участие</button>
+    <p class="status" id="cancelStatus" role="status" aria-live="polite"></p>
   </div>
 </section>
 
@@ -415,6 +465,49 @@
   const btn = document.getElementById('submitBtn');
   const status = document.getElementById('status');
   const success = document.getElementById('success');
+  const successText = document.getElementById('successText');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const cancelStatus = document.getElementById('cancelStatus');
+
+  // --- локальное хранилище (с запасным вариантом для приватного режима) ---
+  const mem = {};
+  const store = {
+    get(k){ try { return localStorage.getItem(k); } catch { return mem[k] ?? null; } },
+    set(k,v){ try { localStorage.setItem(k,v); } catch { mem[k]=v; } },
+    del(k){ try { localStorage.removeItem(k); } catch { delete mem[k]; } }
+  };
+
+  // Постоянный идентификатор этого устройства: не даёт отправить форму
+  // дважды с одного телефона/браузера и нужен для отмены участия.
+  function getDeviceId(){
+    let id = store.get('vc_device_id');
+    if (!id) {
+      id = (crypto.randomUUID && crypto.randomUUID()) ||
+           'd-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+      store.set('vc_device_id', id);
+    }
+    return id;
+  }
+
+  function showSuccess(name){
+    form.style.display = 'none';
+    successText.innerHTML = (name ? `<strong>${name}</strong>, отлично — ` : 'Отлично — ') +
+      'жду тебя 19 июля к 18:00.<br>Адрес коттеджа пришлю тебе лично в ближайшее время.<br>Welcome to Vice City.';
+    success.style.display = 'block';
+  }
+
+  function showForm(){
+    success.style.display = 'none';
+    form.style.display = '';
+    btn.disabled = false;
+    btn.textContent = 'Подтверждаю!';
+  }
+
+  // Если с этого устройства уже подтверждали — сразу показываем статус вместо формы
+  const saved = store.get('vc_rsvp');
+  if (saved) {
+    try { showSuccess(JSON.parse(saved).name); } catch { showSuccess(''); }
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -440,17 +533,46 @@
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ action: 'confirm', deviceId: getDeviceId(), ...data })
       });
-      if (!res.ok) throw new Error('bad response');
-      form.style.display = 'none';
-      success.style.display = 'block';
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || 'bad response');
+      store.set('vc_rsvp', JSON.stringify({ name: data.name.trim() }));
+      showSuccess(data.name.trim());
       success.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (err) {
       status.textContent = 'Не получилось отправить. Проверь интернет и попробуй ещё раз — или просто напиши мне напрямую.';
       status.classList.add('err');
       btn.disabled = false;
       btn.textContent = 'Подтверждаю!';
+    }
+  });
+
+  cancelBtn.addEventListener('click', async () => {
+    if (!confirm('Точно отменить участие? Если передумаешь, форму можно будет заполнить заново.')) return;
+    cancelStatus.textContent = '';
+    cancelStatus.classList.remove('err');
+    cancelBtn.disabled = true;
+    cancelBtn.textContent = 'Отменяю…';
+
+    try {
+      const res = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel', deviceId: getDeviceId() })
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || 'bad response');
+      store.del('vc_rsvp');
+      showForm();
+      form.reset();
+      status.textContent = 'Участие отменено. Если передумаешь — просто заполни форму снова 🙂';
+    } catch (err) {
+      cancelStatus.textContent = 'Не получилось отменить. Попробуй ещё раз или напиши мне напрямую.';
+      cancelStatus.classList.add('err');
+    } finally {
+      cancelBtn.disabled = false;
+      cancelBtn.textContent = 'Отменить участие';
     }
   });
 </script>
