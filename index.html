@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vice City Party: 35 Years — 19 июля</title>
+<meta name="description" content="Личное приглашение на день рождения. Подтверди участие — это займёт 20 секунд.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Yellowtail&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#160a2e;
+    --night-deep:#0d0620;
+    --pink:#ff2d95;
+    --cyan:#00e5ff;
+    --sunset:#ff9e1f;
+    --cream:#fff6fa;
+    --muted:#c8b6e2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Jost',sans-serif;
+    background:var(--night-deep);
+    color:var(--cream);
+    overflow-x:hidden;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:48px 20px 120px;
+    background:linear-gradient(180deg,#0d0620 0%,#2a0f4d 45%,#6b1c6e 72%,#c23a6b 100%);
+    overflow:hidden;
+  }
+  /* солнце с полосами */
+  .sun{
+    position:absolute;
+    bottom:110px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(420px,80vw);
+    aspect-ratio:1;
+    border-radius:50%;
+    background:linear-gradient(180deg,#ffd23f 0%,var(--sunset) 45%,var(--pink) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) top/100% 55% no-repeat,
+      repeating-linear-gradient(180deg,#000 0 14px,transparent 14px 24px) bottom/100% 45% no-repeat;
+    mask:linear-gradient(#000 0 0) top/100% 55% no-repeat,
+      repeating-linear-gradient(180deg,#000 0 14px,transparent 14px 24px) bottom/100% 45% no-repeat;
+    filter:blur(.4px);
+    opacity:.9;
+  }
+  /* сетка-горизонт */
+  .grid-floor{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:190px;
+    background:
+      linear-gradient(180deg,transparent,rgba(13,6,32,.55)),
+      repeating-linear-gradient(90deg,rgba(0,229,255,.35) 0 2px,transparent 2px 70px),
+      repeating-linear-gradient(180deg,rgba(0,229,255,.35) 0 2px,transparent 2px 34px);
+    transform:perspective(340px) rotateX(58deg);
+    transform-origin:bottom;
+  }
+  /* пальмы */
+  .palm{
+    position:absolute;
+    bottom:130px;
+    width:190px;
+    opacity:.95;
+    z-index:2;
+  }
+  .palm.left{left:-30px;transform:scaleX(-1)}
+  .palm.right{right:-30px}
+  .hero-content{position:relative;z-index:3;max-width:760px}
+  .eyebrow{
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    font-size:13px;
+    color:var(--cyan);
+    text-shadow:0 0 12px rgba(0,229,255,.8);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Righteous',cursive;
+    font-size:clamp(52px,11vw,110px);
+    line-height:.95;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color:var(--cream);
+    text-shadow:
+      0 0 8px rgba(255,45,149,.9),
+      0 0 28px rgba(255,45,149,.7),
+      0 0 70px rgba(255,45,149,.45),
+      3px 3px 0 rgba(0,229,255,.55);
+    animation:flicker 6s infinite;
+  }
+  @keyframes flicker{
+    0%,100%{opacity:1}
+    92%{opacity:1}
+    93%{opacity:.75}
+    94%{opacity:1}
+    96%{opacity:.85}
+    97%{opacity:1}
+  }
+  .script{
+    font-family:'Yellowtail',cursive;
+    font-size:clamp(34px,7vw,64px);
+    color:var(--cyan);
+    text-shadow:0 0 10px rgba(0,229,255,.9),0 0 34px rgba(0,229,255,.6);
+    transform:rotate(-4deg);
+    display:inline-block;
+    margin-top:2px;
+  }
+  .hero-date{
+    margin-top:26px;
+    font-size:clamp(17px,2.6vw,21px);
+    font-weight:600;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .hero-date span{color:var(--sunset)}
+  .cta{
+    display:inline-block;
+    margin-top:32px;
+    padding:15px 44px;
+    font-family:'Jost',sans-serif;
+    font-weight:600;
+    font-size:17px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--night-deep);
+    background:linear-gradient(90deg,var(--cyan),#7df9ff);
+    border-radius:999px;
+    text-decoration:none;
+    box-shadow:0 0 22px rgba(0,229,255,.6),0 0 60px rgba(0,229,255,.25);
+    transition:transform .15s ease,box-shadow .15s ease;
+  }
+  .cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,229,255,.85),0 0 80px rgba(0,229,255,.35)}
+  .cta:focus-visible{outline:3px solid var(--cream);outline-offset:3px}
+
+  /* ===== INFO ===== */
+  .info{
+    position:relative;
+    padding:64px 20px 26px;
+    max-width:860px;
+    margin:0 auto;
+  }
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:16px;
+  }
+  .card{
+    border:1px solid rgba(255,45,149,.45);
+    border-radius:14px;
+    padding:22px 20px;
+    background:linear-gradient(160deg,rgba(255,45,149,.08),rgba(0,229,255,.05));
+    box-shadow:inset 0 0 24px rgba(255,45,149,.07);
+  }
+  .card h3{
+    font-family:'Righteous',cursive;
+    font-size:15px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--pink);
+    text-shadow:0 0 10px rgba(255,45,149,.6);
+    margin-bottom:10px;
+  }
+  .card p{font-size:16.5px;line-height:1.5;color:var(--cream)}
+  .card p small{color:var(--muted);font-size:14px;display:block;margin-top:6px}
+
+  /* ===== FORM ===== */
+  .rsvp{
+    max-width:560px;
+    margin:0 auto;
+    padding:40px 20px 30px;
+  }
+  .rsvp h2{
+    font-family:'Righteous',cursive;
+    font-size:clamp(28px,5vw,38px);
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--cyan);
+    text-shadow:0 0 14px rgba(0,229,255,.7);
+    margin-bottom:8px;
+  }
+  .rsvp .sub{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:30px;
+    font-size:16px;
+  }
+  .field{margin-bottom:24px}
+  label.top{
+    display:block;
+    font-weight:600;
+    letter-spacing:.06em;
+    margin-bottom:10px;
+    font-size:16px;
+  }
+  input[type=text]{
+    width:100%;
+    padding:15px 18px;
+    font-family:'Jost',sans-serif;
+    font-size:17px;
+    color:var(--cream);
+    background:rgba(255,255,255,.05);
+    border:1.5px solid rgba(0,229,255,.5);
+    border-radius:12px;
+    outline:none;
+    transition:border-color .15s,box-shadow .15s;
+  }
+  input[type=text]:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 14px rgba(0,229,255,.45);
+  }
+  .choices{display:grid;gap:10px}
+  .choice{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    border:1.5px solid rgba(255,45,149,.4);
+    border-radius:12px;
+    cursor:pointer;
+    transition:border-color .15s,background .15s,box-shadow .15s;
+    font-size:16.5px;
+  }
+  .choice:hover{border-color:rgba(255,45,149,.8)}
+  .choice input{
+    accent-color:var(--pink);
+    width:19px;height:19px;
+    flex-shrink:0;
+  }
+  .choice:has(input:checked){
+    border-color:var(--pink);
+    background:rgba(255,45,149,.12);
+    box-shadow:0 0 14px rgba(255,45,149,.35);
+  }
+  .choice:has(input:focus-visible){outline:2px solid var(--cream);outline-offset:2px}
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;width:0;overflow:hidden}
+  button.submit{
+    width:100%;
+    padding:17px;
+    font-family:'Righteous',cursive;
+    font-size:19px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--night-deep);
+    background:linear-gradient(90deg,var(--pink),var(--sunset));
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 0 22px rgba(255,45,149,.55);
+    transition:transform .15s,box-shadow .15s,opacity .15s;
+  }
+  button.submit:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(255,45,149,.8)}
+  button.submit:focus-visible{outline:3px solid var(--cream);outline-offset:3px}
+  button.submit:disabled{opacity:.55;cursor:wait;transform:none}
+  .status{
+    margin-top:18px;
+    text-align:center;
+    font-size:16px;
+    line-height:1.5;
+    min-height:24px;
+  }
+  .status.err{color:#ff8f8f}
+  .success{
+    display:none;
+    text-align:center;
+    padding:34px 22px;
+    border:1.5px solid rgba(0,229,255,.55);
+    border-radius:18px;
+    background:linear-gradient(160deg,rgba(0,229,255,.09),rgba(255,45,149,.07));
+    box-shadow:0 0 30px rgba(0,229,255,.2);
+  }
+  .success h3{
+    font-family:'Righteous',cursive;
+    font-size:26px;
+    text-transform:uppercase;
+    color:var(--sunset);
+    text-shadow:0 0 12px rgba(255,158,31,.6);
+    margin-bottom:12px;
+  }
+  .success p{color:var(--cream);font-size:17px;line-height:1.55}
+
+  /* ===== FOOTER ===== */
+  footer{
+    text-align:center;
+    padding:34px 20px 46px;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+    max-width:520px;
+    margin:0 auto;
+  }
+  footer strong{color:var(--cream)}
+
+  @media (max-width:640px){
+    .palm{width:130px;bottom:150px}
+    .sun{bottom:140px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    h1{animation:none}
+    *{transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="sun" aria-hidden="true"></div>
+  <svg class="palm left" viewBox="0 0 200 260" fill="#0d0620" aria-hidden="true">
+    <path d="M97 258c4-60 2-110-8-150l14-2c14 36 16 90 12 152z"/>
+    <path d="M95 108C70 92 38 90 10 104c26-26 62-32 92-14z"/>
+    <path d="M98 104C80 78 50 64 18 66c32-16 70-8 90 26z"/>
+    <path d="M102 100c-4-30 8-60 32-78-8 30-12 56-8 76z"/>
+    <path d="M104 102c14-26 42-42 74-40-28 12-50 28-60 48z"/>
+    <path d="M103 106c22-12 50-10 72 8-26-4-50 0-66 10z"/>
+  </svg>
+  <svg class="palm right" viewBox="0 0 200 260" fill="#0d0620" aria-hidden="true">
+    <path d="M97 258c4-60 2-110-8-150l14-2c14 36 16 90 12 152z"/>
+    <path d="M95 108C70 92 38 90 10 104c26-26 62-32 92-14z"/>
+    <path d="M98 104C80 78 50 64 18 66c32-16 70-8 90 26z"/>
+    <path d="M102 100c-4-30 8-60 32-78-8 30-12 56-8 76z"/>
+    <path d="M104 102c14-26 42-42 74-40-28 12-50 28-60 48z"/>
+    <path d="M103 106c22-12 50-10 72 8-26-4-50 0-66 10z"/>
+  </svg>
+  <div class="grid-floor" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <p class="eyebrow">Личное приглашение</p>
+    <h1>Vice City<br>Party</h1>
+    <span class="script">35 years</span>
+    <p class="hero-date">19 июля · <span>18:00</span> · Коттедж</p>
+    <a class="cta" href="#rsvp">Я в деле</a>
+  </div>
+</header>
+
+<section class="info">
+  <div class="info-grid">
+    <div class="card">
+      <h3>Когда</h3>
+      <p>Суббота, 19 июля, начало в 18:00.<small>Подтверди участие до 18 июля.</small></p>
+    </div>
+    <div class="card">
+      <h3>Где</h3>
+      <p>Коттедж за городом.<small>Точный адрес отправлю тебе лично после подтверждения.</small></p>
+    </div>
+    <div class="card">
+      <h3>Дресс-код</h3>
+      <p>Неон, гавайские рубашки, пастель и всё из 80-х.<small>Майами-вайб приветствуется, но не обязателен.</small></p>
+    </div>
+  </div>
+</section>
+
+<section class="rsvp" id="rsvp">
+  <h2>Подтверди участие</h2>
+  <p class="sub">Это займёт 20 секунд — просто чтобы я знал, сколько нас будет.</p>
+
+  <form id="rsvpForm" novalidate>
+    <div class="field">
+      <label class="top" for="name">Твоё имя (и фамилия, если тёзок много)</label>
+      <input type="text" id="name" name="name" maxlength="80" autocomplete="off" required>
+    </div>
+
+    <div class="field">
+      <label class="top">С кем придёшь?</label>
+      <div class="choices" role="radiogroup" aria-label="С кем придёшь">
+        <label class="choice"><input type="radio" name="pair" value="solo" required> Приду один / одна</label>
+        <label class="choice"><input type="radio" name="pair" value="couple"> Приду с парой (муж / жена / девушка / парень)</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="top">Будете с детьми?</label>
+      <div class="choices" role="radiogroup" aria-label="Будете с детьми">
+        <label class="choice"><input type="radio" name="kids" value="no" required> Без детей</label>
+        <label class="choice"><input type="radio" name="kids" value="yes"> Да, с детьми</label>
+      </div>
+    </div>
+
+    <!-- ловушка для ботов: люди это поле не видят -->
+    <div class="hp" aria-hidden="true">
+      <label>Не заполняйте это поле<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <button class="submit" type="submit" id="submitBtn">Подтверждаю!</button>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="success" id="success">
+    <h3>Ты в списке! 🌴</h3>
+    <p>Отлично, жду тебя 19 июля к 18:00.<br>Адрес коттеджа пришлю тебе лично в ближайшее время.<br>Welcome to Vice City.</p>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Это не рассылка и не реклама</strong> — личное приглашение на мой день рождения.
+  Сайт не запрашивает никаких данных, кроме имени: ни телефонов, ни карт, ни кодов.
+  Если сомневаешься — просто напиши мне, и я всё подтвержу голосом 🙂</p>
+</footer>
+
+<script>
+  const form = document.getElementById('rsvpForm');
+  const btn = document.getElementById('submitBtn');
+  const status = document.getElementById('status');
+  const success = document.getElementById('success');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.textContent = '';
+    status.classList.remove('err');
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (!data.name || !data.name.trim()) {
+      status.textContent = 'Напиши своё имя, чтобы я знал, кого ждать 🙂';
+      status.classList.add('err');
+      return;
+    }
+    if (!data.pair || !data.kids) {
+      status.textContent = 'Отметь, с кем придёшь и будете ли с детьми.';
+      status.classList.add('err');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Отправляю…';
+
+    try {
+      const res = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('bad response');
+      form.style.display = 'none';
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+      status.textContent = 'Не получилось отправить. Проверь интернет и попробуй ещё раз — или просто напиши мне напрямую.';
+      status.classList.add('err');
+      btn.disabled = false;
+      btn.textContent = 'Подтверждаю!';
+    }
+  });
+</script>
+
+</body>
+</html>
